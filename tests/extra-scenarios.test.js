@@ -37,6 +37,8 @@ import test from 'test-pack';
 import {test0, test1} from 'test-pack';
 
 const value = _(field).map(v=> v[MY_KEY]).value();
+let aux = _(existing)
+      .intersection(selection.next).value()
 `,
       output: 
 `
@@ -46,6 +48,7 @@ import {test0, test1} from 'test-pack';
 import { map } from 'lodash-es/map';
 
 const value = map(field, v=> v[MY_KEY]);
+let aux = intersection(existing, selection.next)
 `,
       errors: [{ message }, { message }]
     },
