@@ -72,6 +72,8 @@ or run this command (only use it the first time you are setting the project)
 
 ``` npm run prep ```
 
+**You might need admin privileges to run `npm link`**
+
 Now you are going to be able to run the `migrate-lodash` command specifiying the path to the project that you want to migrate.
 
 ```
