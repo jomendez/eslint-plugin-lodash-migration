@@ -1,21 +1,24 @@
 'use strict';
 
 const { eslintOptions } = require('./utils/eslint-options');
-const ruleName = 'no-full-lodash-imports';
+const convertAndImportRuleName = 'convert-and-import';
+const noFullLodashImportRuleName = 'no-full-lodash-imports';
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const rule = require('../lib/index').rules[ruleName];
+const convertAndImportRuleNameRule = require('../lib/index').rules[convertAndImportRuleName];
+const noFullLodashImportRuleNameRule = require('../lib/index').rules[noFullLodashImportRuleName];
 const RuleTester = require('eslint').RuleTester;
 
 //------------------------------------------------------------------------------
 // Tests
 //------------------------------------------------------------------------------
-const message = 'Import the entired lodash module is not optimal, please consider refactor it or apply --fix';
+const importMessage = 'Import the entired lodash module is not optimal, please consider refactor it or apply --fix';
+const individualMethodsMessage = 'Use individual imports of lodash method, please consider refactor it or apply --fix';
 const ruleTester = new RuleTester(eslintOptions);
 
-ruleTester.run(ruleName, rule, {
+ruleTester.run(convertAndImportRuleName, convertAndImportRuleNameRule, {
   valid: [
 `
 import test from 'test-pack';
@@ -36,41 +39,71 @@ import * as _ from 'lodash';
 import test from 'test-pack';
 import {test0, test1} from 'test-pack';
 
-const value = _(field).map(v=> v[MY_KEY]).value();
 let aux = _(existing)
       .intersection(selection.next).value()
 `,
       output: 
 `
-
+import * as _ from 'lodash';
 import test from 'test-pack';
 import {test0, test1} from 'test-pack';
-import { map } from 'lodash-es/map';
+import intersection from 'lodash-es/intersection';
 
-const value = map(field, v=> v[MY_KEY]);
 let aux = intersection(existing, selection.next)
 `,
-      errors: [{ message }, { message }]
+      errors: [{ message: individualMethodsMessage }]
     },
-//     {
-//       code: 
-// `
-// import * as _ from 'lodash';
+    {
+      code: 
+`
+import * as blah from 'blah-pack';
 
-// _(jsconfig).each((value, name) => {
-//   this[name] = value;
-// });
-// `,
-//       output: 
-// `
+let range = [_(currenr).first().range[0], _(current).last().rangeCar[1]];
+`,
+      output: 
+`
+import * as blah from 'blah-pack';
+import first from 'lodash-es/first';
 
-// import { each } from 'lodash-es/each';
+let range = [first(currenr).range[0], _(current).last().rangeCar[1]];
+`,
+      errors: [{  message: individualMethodsMessage }, {  message: individualMethodsMessage }]
+    },
+    {
+      code: 
+`
+import * as blah from 'blah-pack';
+import first from 'lodash-es/first';
 
-// each(jsconfig, (value, name) => {
-//   this[name] = value;
-// });
-// `,
-//       errors: [{ message }, { message }]
-//     }
+let range = [first(currenr).range[0], _(current).last().rangeCar[1]];
+`,
+      output: 
+`
+import * as blah from 'blah-pack';
+import first from 'lodash-es/first';
+import last from 'lodash-es/last';
+
+let range = [first(currenr).range[0], last(current).rangeCar[1]];
+`,
+      errors: [{  message: individualMethodsMessage }]
+    },
+    {
+      code: 
+`
+import * as blah from 'blah-pack';
+import first from 'lodash-es/first';
+
+let range = [first(currenr).range[0], _.clone(test)];
+`,
+      output: 
+`
+import * as blah from 'blah-pack';
+import first from 'lodash-es/first';
+import clone from 'lodash-es/clone';
+
+let range = [first(currenr).range[0], clone(test)];
+`,
+      errors: [{  message: individualMethodsMessage }]
+    }
   ]
 });

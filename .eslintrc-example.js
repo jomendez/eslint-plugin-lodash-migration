@@ -10,7 +10,7 @@ module.exports = {
         "files": [ "./**/*.ts" ],
         "plugins": ["lodash-migration"],
         "rules": {
-          "lodash-migration/no-full-lodash-imports": 1,
+          "lodash-migration/convert-and-import": 1,
         }
       }
     ]

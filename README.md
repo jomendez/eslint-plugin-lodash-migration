@@ -47,13 +47,13 @@ Add eslint to an angular project:
 ng add @angular-eslint/schematics
 ```
 
-Add `lodash-migration` to the plugins seccion `no-full-lodash-imports` to the plugins section of your `.eslintrc` or `.eslintrc.json` configuration file. You can omit the `eslint-plugin-` prefix:
+Add `lodash-migration` to the plugins seccion `convert-and-import` to the plugins section of your `.eslintrc` or `.eslintrc.json` configuration file. You can omit the `eslint-plugin-` prefix:
 
 ```json
 {
       "plugins": ["lodash-migration"],
       "rules": {
-        "lodash-migration/no-full-lodash-imports": 1,
+        "lodash-migration/convert-and-import": 1,
 }
 ```
 
