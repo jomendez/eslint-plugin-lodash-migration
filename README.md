@@ -87,6 +87,41 @@ migrate-lodash -p <path-to-yout-project>/src
 **Note:**
 Please make sure you select a folder with the ts files that are using ladash the old fashion and you want to migrate, for example:
 `angular-project/src`
-If you specify `angular-project` only the plugin will try to apply the migration to all directories within your angular project including the node_module folder, this my trhrow some error.  
+If you specify `angular-project` only the plugin will try to apply the migration to all directories within your angular project including the node_module folder, this might throw some error.  
+
+## What to spect 
+
+This solution is not 100% effective since there are too many scenarios and combinations, but at least it will save you 90% of the effort of going manually file by file applying the changes.
+We recommend having as much unit test coverage as possible, this way you'll be able to catch as many potential errors as possible from the refactor.
+
+### Common cases for refactor
+
+Simple cases:
+
+```
+// from:
+_.isEmpty(collection)
+
+// to:
+isEmpty(collection)
+```
+
+or 
+
+```
+// from:
+_(collection).isEmpty()
+
+// to:
+isEmpty(collection)
+```
 
 
+A little bit more complex cases
+```
+// from:
+_(collectionTest).catsArray().uniq().value()
+
+// to:
+uniq(castArray(collectionTest))
+```
