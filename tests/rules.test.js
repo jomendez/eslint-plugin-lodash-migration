@@ -224,7 +224,6 @@ const obj2 = {};
 `,
       output:
         `
-
 import test from 'test-pack';
 import {test0, test1} from 'test-pack';
 
