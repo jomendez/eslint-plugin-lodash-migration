@@ -1,6 +1,6 @@
 const { ESLint } = require("eslint");
 
-module.exports = async function main(path) {
+module.exports = async function improve(path) {
   eslint = new ESLint({
     useEslintrc: false,
     fix: true,
@@ -11,36 +11,24 @@ module.exports = async function main(path) {
       },
       plugins: ["lodash-migration"],
       rules: {
-        "lodash-migration/no-full-lodash-imports": 1,
-        "lodash-migration/convert-and-import": 1
+        "lodash-migration/unify-imports-into-one-call": 1
       }
     },
     plugins: {
       "eslint-plugin-lodash-migration": {
         rules: {
-          "no-full-lodash-imports": require("../lib/rules/no-full-lodash-imports"),
-          "convert-and-import": require("../lib/rules/convert-and-import")
+           "unify-imports-into-one-call": require("../lib/rules/unify-imports-into-one-call")
         }
       }
     }
   });
 
-  console.log('******** Rulers: no-full-lodash-imports, convert-and-import  ********')
-  for (let i = 0; i < 5; i++) {
-    console.log('***** round ', i+1, '***********')
-    await migrate(path);
-  }
+  console.log('******** Ruler: unify-imports-into-one-call ********')
+  await migrate(path);
+
 
 }
 
-function getAllOutputsWhereLodashStillPresent(resultArr) {
-  return (resultArr.filter(x => isLodashStillPresent(x.output)) || []).map(x => x.output) || []
-}
-
-function isLodashStillPresent(code) {
-  const regex = /(_\.|_\()/g;
-  return code.match(regex);
-}
 
 async function migrate(path) {
   try {
@@ -50,7 +38,6 @@ async function migrate(path) {
     console.log(`${results.length} files analyzed`);
     const modified = results.filter(x => !!x.output) || [];
     console.log(`${modified.length} files modified`);
-    console.log(`${getAllOutputsWhereLodashStillPresent(modified).length} file(s) where old lodash usage still present`);
     console.log('*********** success! **************');
 
   } catch (err) {

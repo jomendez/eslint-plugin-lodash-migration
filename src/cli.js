@@ -1,6 +1,7 @@
 const arg = require('arg');
 const fs = require('fs');
 const main = require('./main');
+const improve = require('./improve');
 
 function parseArgumentsIntoOptions(rawArgs) {
   const args = arg(
@@ -20,7 +21,7 @@ function parseArgumentsIntoOptions(rawArgs) {
 }
 
 module.exports = {
-  cli(args) {
+  async cli(args) {
     const options = parseArgumentsIntoOptions(args);
 
     const optionsHelp = Object.entries(options).some(([key, value]) => key === 'help' && value);
@@ -37,13 +38,20 @@ module.exports = {
         console.error(`Path provided doesn't exist: ${options.path}`);
         return;
       }
-      // perform migration here
-      main(options.path)
-        .then()
-        .catch((error) => {
-          process.exitCode = 1;
-          console.error(error);
-        });
+
+      try {
+        await main(options.path)
+      } catch (error) {
+        process.exitCode = 1;
+        console.error(error);
+      }
+
+      try {
+        await improve(options.path)
+      } catch (error) {
+        process.exitCode = 1;
+        console.error(error);
+      }
     }
   }
 }
