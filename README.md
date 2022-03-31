@@ -84,6 +84,19 @@ or
 migrate-lodash -p <path-to-yout-project>/src
 ```
 
+### Other flags:
+By default the imports are generated like:
+```javascript
+import { findIndex, catsArray, uniq } from 'lodash-es';
+```
+
+If you use flag `--individual-imports` or `-i` in the cli when running the `migrate-lodash` command, then the output is going to be:
+```javascript
+import findIndex from 'lodash-es/findIndex';
+import catsArray from 'lodash-es/catsArray';
+import uniq from 'lodash-es/uniq';
+```
+
 **Note:**
 Please make sure you select a folder with the ts files that are using ladash the old fashion and you want to migrate, for example:
 `angular-project/src`

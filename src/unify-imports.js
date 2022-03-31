@@ -1,3 +1,4 @@
+const { default: chalk } = require("chalk");
 const { ESLint } = require("eslint");
 
 module.exports = async function improve(path) {
@@ -33,16 +34,16 @@ module.exports = async function improve(path) {
 async function migrate(path) {
   try {
     const results = await eslint.lintFiles([`${path}/**/*.ts`]);
-    // 3. Modify the files with the fixed code.
+    // Modify the files with the fixed code.
     await ESLint.outputFixes(results);
     console.log(`${results.length} files analyzed`);
     const modified = results.filter(x => !!x.output) || [];
     console.log(`${modified.length} files modified`);
-    console.log('*********** success! **************');
+    console.log(chalk.green('*********** success! **************'));
 
   } catch (err) {
     console.log('***********************\n');
-    console.error('There was an error: ', err, '\n')
+    console.error(chalk.red('There was an error: ', err, '\n'));
     console.log('***********************\n');
   }
 }

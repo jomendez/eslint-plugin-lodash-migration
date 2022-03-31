@@ -197,6 +197,108 @@ const aux = map(this.arg, 'test');
 const aux1 = map(this.arg, 'test');
 `,
       errors: [{ message: individualMethodsMessage }]
+    },
+    {
+      code:
+        `
+import test from 'test-pack';
+
+const aux1 = _.chain(arr.slice(myIndex))
+.findIndex((line: string) => {
+  return this.val1 && this.val2;
+})
+.value();
+`,
+      output:
+        `
+import test from 'test-pack';
+
+const aux1 = _(arr.slice(myIndex))
+.findIndex((line: string) => {
+  return this.val1 && this.val2;
+})
+.value();
+`,
+      errors: [{ message: individualMethodsMessage }]
+    },
+    {
+      code:
+        `
+import test from 'test-pack';
+
+const aux1 = _(arr.slice(myIndex))
+.findIndex((line: string) => {
+  return this.val1 && this.val2;
+})
+.value();
+`,
+      output:
+        `
+import test from 'test-pack';
+import findIndex from 'lodash-es/findIndex';
+
+const aux1 = findIndex(arr.slice(myIndex), (line: string) => {
+  return this.val1 && this.val2;
+});
+`,
+      errors: [{ message: individualMethodsMessage }]
+    },
+    {
+      code:
+        `
+import test from 'test-pack';
+
+if(arr.length === 0 && !_.isString(arr)){
+  console.log('test')
+}
+`,
+      output:
+        `
+import test from 'test-pack';
+
+if(arr.length === 0 && typeof arr !== 'string'){
+  console.log('test')
+}
+`,
+      errors: [{ message: individualMethodsMessage }]
+    },
+    {
+      code:
+        `
+import test from 'test-pack';
+
+if(arr.length === 0 && !_.isArray(arr)){
+  console.log('test')
+}
+`,
+      output:
+        `
+import test from 'test-pack';
+
+if(arr.length === 0 && !Array.isArray(arr)){
+  console.log('test')
+}
+`,
+      errors: [{ message: individualMethodsMessage }]
+    },
+    {
+      code:
+        `
+import test from 'test-pack';
+
+if(arr.length === 0 && !_.isUndefined(arr)){
+  console.log('test')
+}
+`,
+      output:
+        `
+import test from 'test-pack';
+
+if(arr.length === 0 && arr !== undefined){
+  console.log('test')
+}
+`,
+      errors: [{ message: individualMethodsMessage }]
     }
   ]
 });

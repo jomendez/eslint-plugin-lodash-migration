@@ -1,13 +1,16 @@
 const arg = require('arg');
 const fs = require('fs');
 const main = require('./main');
-const improve = require('./improve');
+const unifyImports = require('./unify-imports');
+const { default: chalk } = require('chalk');
 
 function parseArgumentsIntoOptions(rawArgs) {
   const args = arg(
     {
       '--path': String,
       '-p': '--path',
+      '--individual-imports': Boolean,
+      '-i': '--individual-imports',
       '-h': Boolean
     },
     {
@@ -16,7 +19,8 @@ function parseArgumentsIntoOptions(rawArgs) {
   );
   return {
     path: args['--path'] || '',
-    help: args['-h'] || false
+    help: args['-h'] || false,
+    individualImports: args['--individual-imports'] || false
   };
 }
 
@@ -35,7 +39,7 @@ module.exports = {
     if (options.path) {
       if (!fs.existsSync(options.path)) {
         console.log('\n');
-        console.error(`Path provided doesn't exist: ${options.path}`);
+        console.error(chalk.red(`Path provided doesn't exist: ${options.path}`));
         return;
       }
 
@@ -45,12 +49,14 @@ module.exports = {
         process.exitCode = 1;
         console.error(error);
       }
-
-      try {
-        await improve(options.path)
-      } catch (error) {
-        process.exitCode = 1;
-        console.error(error);
+      
+      if (!options.individualImports) {
+        try {
+          await unifyImports(options.path)
+        } catch (error) {
+          process.exitCode = 1;
+          console.error(error);
+        }
       }
     }
   }

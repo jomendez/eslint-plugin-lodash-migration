@@ -1,4 +1,5 @@
 const { ESLint } = require("eslint");
+const chalk = require('chalk');
 
 module.exports = async function main(path) {
   eslint = new ESLint({
@@ -51,11 +52,11 @@ async function migrate(path) {
     const modified = results.filter(x => !!x.output) || [];
     console.log(`${modified.length} files modified`);
     console.log(`${getAllOutputsWhereLodashStillPresent(modified).length} file(s) where old lodash usage still present`);
-    console.log('*********** success! **************');
+    console.log(chalk.green('*********** success! **************'));
 
   } catch (err) {
     console.log('***********************\n');
-    console.error('There was an error: ', err, '\n')
+    console.error(chalk.red('There was an error: ', err, '\n'))
     console.log('***********************\n');
   }
 }
