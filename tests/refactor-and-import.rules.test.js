@@ -300,5 +300,66 @@ if(arr.length === 0 && arr !== undefined){
 `,
       errors: [{ message: individualMethodsMessage }]
     }
+
+
+
+    ,
+    {
+      code:
+        `
+import test from 'test-pack';
+
+if(_.isString(props[key])){
+  console.log('test')
+}
+`,
+      output:
+        `
+import test from 'test-pack';
+
+if(typeof props[key] === 'string'){
+  console.log('test')
+}
+`,
+      errors: [{ message: individualMethodsMessage }]
+    },
+    {
+      code:
+        `
+import test from 'test-pack';
+
+if(_.isArray(arr)){
+  console.log('test')
+}
+`,
+      output:
+        `
+import test from 'test-pack';
+
+if(Array.isArray(arr)){
+  console.log('test')
+}
+`,
+      errors: [{ message: individualMethodsMessage }]
+    },
+    {
+      code:
+        `
+import test from 'test-pack';
+
+if(_.isUndefined(jsonData[propName])){
+  console.log('test')
+}
+`,
+      output:
+        `
+import test from 'test-pack';
+
+if(jsonData[propName] === undefined){
+  console.log('test')
+}
+`,
+      errors: [{ message: individualMethodsMessage }]
+    }
   ]
 });
