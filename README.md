@@ -111,7 +111,7 @@ We recommend having as much unit test coverage as possible, this way you'll be a
 
 Simple cases:
 
-```
+```javascript
 // from:
 _.isEmpty(collection)
 
@@ -121,7 +121,7 @@ isEmpty(collection)
 
 or 
 
-```
+```javascript
 // from:
 _(collection).isEmpty()
 
@@ -131,10 +131,50 @@ isEmpty(collection)
 
 
 A little bit more complex cases
-```
+```javascript
 // from:
 _(collectionTest).catsArray().uniq().value()
 
 // to:
 uniq(castArray(collectionTest))
+```
+
+refactoring _.chain()
+```javascript
+//from:
+_.chain(arr.slice(myIndex))
+.findIndex((line: string) => {
+  return this.val1 && this.val2;
+})
+.value();
+
+//to:
+findIndex(arr.slice(myIndex), (line: string) => {
+  return this.val1 && this.val2;
+});
+```
+
+### Using native code over lodash
+
+```javascript
+//from:
+!_.isString(arr)
+_.isString(arr)
+//to:
+typeof arr !== 'string'
+typeof arr === 'string'
+```
+```javascript
+//from:
+!_.isArray(arr)
+//to:
+!Array.isArray(arr)
+```
+```javascript
+//from:
+!_.isUndefined(arr)
+_.isUndefined(arr)
+//to:
+arr !== undefined
+arr === undefined
 ```
