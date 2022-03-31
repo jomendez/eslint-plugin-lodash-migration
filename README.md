@@ -102,7 +102,7 @@ Please make sure you select a folder with the ts files that are using ladash the
 `angular-project/src`
 If you specify `angular-project` only the plugin will try to apply the migration to all directories within your angular project including the node_module folder, this might throw some error.  
 
-## What to spect 
+## What to expect 
 
 This solution is not 100% effective since there are too many scenarios and combinations, but at least it will save you 90% of the effort of going manually file by file applying the changes.
 We recommend having as much unit test coverage as possible, this way you'll be able to catch as many potential errors as possible from the refactor.
